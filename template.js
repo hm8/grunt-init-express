@@ -29,7 +29,9 @@ exports.warnOn = '*';
 // The actual init template.
 exports.template = function(grunt, init, done) {
 
-  init.process({type: 'node'}, [
+  init.process({
+    type: 'node'
+  }, [
     // Prompt for these values.
     init.prompt('name'),
     init.prompt('description'),
@@ -42,8 +44,7 @@ exports.template = function(grunt, init, done) {
     init.prompt('author_email'),
     init.prompt('author_url'),
     init.prompt('node_version', '>= 0.8.0'),
-    init.prompt('main', 'app.js'),
-    {
+    init.prompt('main', 'app.js'), {
       name: 'travis',
       message: 'Will this project be tested with Travis CI?',
       default: 'Y/n',
@@ -52,18 +53,30 @@ exports.template = function(grunt, init, done) {
   ], function(err, props) {
     props.keywords = [];
     props.dependencies = {
-      'express': '~3.4.4',
-      'ejs': '~0.8.4'
+      "body-parser": "~1.2.0",
+      "bunyan": "^0.22.3",
+      "compression": "~1.0.2",
+      "cookie-parser": "~1.1.0",
+      "ejs": "~1.0.0",
+      "express": "~4.2.0",
+      "express-session": "~1.2.0",
+      "node-uuid": "~1.4.1",
+      "async": "~0.9.0",
+      "serve-favicon": "^2.0.0"
     };
     props.devDependencies = {
+      "grunt-hmb": "~0.4.2",
+      "grunt-qiniu": "^0.1.1",
       'grunt-contrib-jshint': '~0.6.4',
-      'grunt-contrib-watch': '~0.5.3',
+      'grunt-contrib-watch': '~0.5.3'
     };
     props.travis = /y/i.test(props.travis);
 
     // Files to copy (and process).
     var files = init.filesToCopy(props);
-    if (!props.travis) { delete files['.travis.yml']; }
+    if (!props.travis) {
+      delete files['.travis.yml'];
+    }
 
     // Add properly-named license files.
     init.addLicenseFiles(files, props.licenses);

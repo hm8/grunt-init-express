@@ -1,32 +1,39 @@
-/**
- * Module dependencies.
- */
-
 var express = require('express'),
+  bodyParser = require('body-parser'),
+  compress = require('compression'),
+  cookieParser = require('cookie-parser'),
+  session = require('express-session'),
+  favicon = require('serve-favicon'),
   http = require('http'),
-  path = require('path');
+  path = require('path'),
+  config = require('./lib/config'),
+  modules = require('./modules');
 
 var app = express();
 
-app.configure(function() {
-  app.set('port', process.env.PORT || 3000);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'ejs');
-  app.use(express.favicon());
-  app.use(express.logger('dev')); //default dev
-  app.use(express.compress());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.cookieParser('your secret here'));
-  app.use(express.session());
-  app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
-});
+app.set('views', __dirname + '/dist/views');
+app.set('view engine', 'ejs');
 
-app.get('/', function(req, res) {
-  res.render('index');
-});
+app.use(favicon(__dirname + '/public/favicon.ico'));
 
-http.createServer(app).listen(app.get('port'), function() {
-  console.log("Express server listening on port " + app.get('port'));
+app.use(compress());
+
+app.use(bodyParser());
+
+app.use(cookieParser(config.get('env.secret')));
+
+app.use(session({
+  cookie: {
+    maxAge: config.get('env.maxAge')
+  }
+}));
+
+app.use(express.static(path.join(__dirname, '/public')));
+
+app.use(express.static(path.join(__dirname, '/dist')));
+
+modules(app);
+
+http.createServer(app).listen(config.get('env.port'), function() {
+  console.log("Express server listening on port " + config.get('env.port'));
 });
