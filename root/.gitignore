@@ -15,7 +15,6 @@ Thumbs.db
 .nojekyll
 .project
 .settings/
-config.dev.js
 node_modules/
 components/
 bower_components/
