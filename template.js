@@ -62,6 +62,7 @@ exports.template = function(grunt, init, done) {
       "express-session": "~1.2.0",
       "node-uuid": "~1.4.1",
       "async": "~0.9.0",
+      "mongoose": "~3.8.10",
       "serve-favicon": "^2.0.0"
     };
     props.devDependencies = {
