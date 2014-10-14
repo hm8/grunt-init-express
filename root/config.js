@@ -8,6 +8,8 @@ var config = {
     maxAge: 1000 * 60 * 60 * 72
   },
 
+  mongo: './db/',
+
   log: {
     name: 'xx',
     streams: [{
